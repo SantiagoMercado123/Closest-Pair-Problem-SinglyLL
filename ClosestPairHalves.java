@@ -1,17 +1,12 @@
 package com.mycompany.closestpairhalves;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import static java.lang.Math.sqrt;
+
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 /*
- * Algorithms and Complexity                                  November 10, 2022
+ * Algorithms and Complexity                                  November 17, 2022
  * IST 4310-01
  * Prof. M. Diaz-Maldonado
  *
@@ -29,143 +24,6 @@ import java.util.Random;
  * Author: Santiago Andrés Mercado Barandica y David Salgado Cortés
  * ID: 200155614 / 
 */
-
-class Node { //Creating a Node for the Linked List
-    Node next;
-    Point p;
-
-    public Node(Point point) {
-        this.p = point;
-        this.next = null;
-    }
-}
-
-class Listy {
-    Node head;
-    int size;
-
-    public Listy(Node h, int s) { //Implementing our own Singly Linked List with a getter to facilitate the implementation.
-        this.head = h;
-        this.size = s;
-    }
-
-    public Node get(int i) {
-        if (i == 0) {
-            return this.head;
-        } else {
-            if (i < 0 || i > size) {
-                System.out.println("Error getter");
-                return null;
-            } else {
-                Node P = this.head;
-                for (int j = 0; j < i; j++) {
-                    P = P.next;
-                }
-                return P;
-            }
-        }
-    }
-
-    public Listy subList(int i, int f, int tam) { //Creates a sublist that ranges from element in position i to element in pos f
-        Listy lists = new Listy(new Node(this.get(i).p), tam);
-        Node P = lists.head;
-        for (int j = 1; j < tam; j++) {
-            P.next = new Node(this.get(j).p);
-            P = P.next;
-        }
-        return lists;
-    }
-}
-
-class Point { // Define a Point class with x and y positions and a position to classify them.
-    int x;
-    int y;
-    int pos;
-
-    public Point(int xx, int yy, int poss) {
-        this.x = xx;
-        this.y = yy;
-        this.pos = poss;
-    }
-}
-
-class TimeComplexityAnalysis {
-
-    private static void create(String name)
-    // creates a file with a given name
-    {
-        try {
-            // defines the filename
-            String fname = (name);
-            // creates a new File object
-            File f = new File(fname);
-
-            String msg = "creating file `" + fname + "' ... ";
-            // creates the new file
-            f.createNewFile();
-
-        } catch (IOException err) {
-            // complains if there is an Input/Output Error
-            err.printStackTrace();
-        }
-
-        return;
-    }
-
-    private static void write(String name, int tm, ArrayList<Integer> is, ArrayList<Integer> comparisons,
-            ArrayList<Integer> runtimes)
-    // writes data to a file with a given name and size
-    {
-        try {
-            // defines the filename
-            String filename = (name);
-            // creates new PrintWriter object for writing file
-            PrintWriter out = new PrintWriter(filename);
-            String fmt = ("%10s %10s %10s\n"); // We store 3 values in different columns per line: amount of
-                                               // integers(n), comparisons and runtime.
-            for (int i = 0; i < tm; ++i) {
-                out.printf(fmt, is.get(i), comparisons.get(i), runtimes.get(i));
-            }
-
-            out.close(); // closes the output stream
-        } catch (FileNotFoundException err) {
-            // complains if file does not exist
-            err.printStackTrace();
-        }
-
-        return;
-    }
-
-    public void Analysis(int ii) { // ii is the amount of integers to reach starting at i=1000 growing at a rate of
-                                   // 2*i.
-        ArrayList<Integer> runtimes = new ArrayList<Integer>();
-        ArrayList<Integer> is = new ArrayList<Integer>();
-        ArrayList<Integer> comparisons = new ArrayList<Integer>(); // We initialize all 3 lists.
-        for (int i = 100; i < ii; i = i * 4 / 3) {
-            ClosestPairHalves cph = new ClosestPairHalves(); // Create a new ClosestPair class to test it.
-            System.out.println(i);
-            long total = 0;
-            int count;
-            Listy list = cph.Initialize(i); // Creating list of coordinates and sorting them by x position.
-            for (int j = 0; j < 256; j++) {
-                long startTime = System.nanoTime();
-                cph.ClosestPair(i, list, 999999999);
-                long endTime = System.nanoTime();
-                long totalTime = endTime - startTime; // We calculate the runtime for each repetition and add it to the
-                                                      // previous ones..
-                total = total + totalTime;
-            }
-            count = cph.getComparisons();
-            count = count / 256; // We find the average comparisons per iteration and store it in a list.
-            total = total / 256; // Average runtime
-            runtimes.add((int) total);
-            is.add(i); // Amount of coords in the array
-            comparisons.add(count);
-        }
-        create("Data.txt");
-        write("Data.txt", is.size(), is, comparisons, runtimes);
-    }
-}
 
 public class ClosestPairHalves {
     private static int count; // Counts number of comparisons.
